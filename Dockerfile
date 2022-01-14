@@ -6,7 +6,7 @@ ENV RUSTUP_HOME=/usr/local/rustup \
     RUST_VERSION=1.58.0 \
     RUSTUP_VERSION=1.24.3
 
-RUN set -eux; \
+RUN apt update && apt dist-upgrade -y && apt install -y wget && set -eux; \
     dpkgArch="$(dpkg --print-architecture)"; \
     case "${dpkgArch##*-}" in \
         amd64) rustArch='x86_64-unknown-linux-gnu'; rustupSha256='3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338' ;; \
