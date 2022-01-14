@@ -24,3 +24,4 @@ RUN apt update && apt dist-upgrade -y && apt install -y wget && set -eux; \
     rustup --version; \
     cargo --version; \
     rustc --version;
+RUN rustup target add x86_64-unknown-linux-musl
