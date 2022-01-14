@@ -3,13 +3,12 @@ FROM public.ecr.aws/lts/ubuntu:latest
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH \
-    RUST_VERSION=%%RUST-VERSION%%
+    RUST_VERSION=1.58.0
+    RUSTUP_VERSION=1.24.3
 
 RUN set -eux; \
-    %%ARCH-CASE%%; \
-    url="https://static.rust-lang.org/rustup/archive/%%RUSTUP-VERSION%%/${rustArch}/rustup-init"; \
+    url="https://static.rust-lang.org/rustup/archive/$RUSTUP_VERSION/${rustArch}/rustup-init"; \
     wget "$url"; \
-    echo "${rustupSha256} *rustup-init" | sha256sum -c -; \
     chmod +x rustup-init; \
     ./rustup-init -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION --default-host ${rustArch}; \
     rm rustup-init; \
