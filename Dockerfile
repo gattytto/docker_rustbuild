@@ -25,3 +25,5 @@ RUN apt update && apt dist-upgrade -y && apt install -y wget && set -eux; \
     cargo --version; \
     rustc --version;
 RUN rustup target add x86_64-unknown-linux-musl
+RUN apt update && apt install -y libssl-dev musl-tools musl-dev
+RUN update-ca-certificates
