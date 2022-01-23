@@ -3,7 +3,7 @@ FROM public.ecr.aws/lts/ubuntu:latest
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH \
-    RUST_VERSION=1.58.0 \
+    RUST_VERSION=1.58.1 \
     RUSTUP_VERSION=1.24.3
 
 RUN apt update && apt dist-upgrade -y && apt install -y wget build-essential && set -eux; \
