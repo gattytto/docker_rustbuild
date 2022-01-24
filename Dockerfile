@@ -36,6 +36,6 @@ RUN adduser \
     rustc --version;
 RUN rustup target add x86_64-unknown-linux-musl
 RUN apt update && apt install -y libssl-dev musl-tools musl-dev
-RUN rustup toolchain add 1.58 && rustup component add rustfmt
+RUN rustup toolchain add $RUST_VERSION && rustup component add rustfmt
 RUN update-ca-certificates
 USER rust:rust
