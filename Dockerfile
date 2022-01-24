@@ -4,9 +4,19 @@ ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH \
     RUST_VERSION=1.58.1 \
-    RUSTUP_VERSION=1.24.3
+    RUSTUP_VERSION=1.24.3 \
+    USER=rust \
+    UID=10001
 
-RUN apt update && apt dist-upgrade -y && apt install -y wget build-essential && set -eux; \
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    "${USER}"; \
+    apt update && apt dist-upgrade -y && apt install -y wget build-essential && set -eux; \
     dpkgArch="$(dpkg --print-architecture)"; \
     case "${dpkgArch##*-}" in \
         amd64) rustArch='x86_64-unknown-linux-gnu'; rustupSha256='3dc5ef50861ee18657f9db2eeb7392f9c2a6c95c90ab41e45ab4ca71476b4338' ;; \
@@ -28,3 +38,4 @@ RUN rustup target add x86_64-unknown-linux-musl
 RUN apt update && apt install -y libssl-dev musl-tools musl-dev
 RUN rustup toolchain add 1.58 && rustup component add rustfmt
 RUN update-ca-certificates
+USER rust:rust
