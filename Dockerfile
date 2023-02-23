@@ -1,10 +1,8 @@
 FROM public.ecr.aws/lts/ubuntu:latest
-
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH \
     RUST_VERSION=1.67.1 \
-    RUSTUP_VERSION=1.5.2 \
     USER=rust \
     UID=10001
 
@@ -16,6 +14,7 @@ RUN adduser \
     --no-create-home \
     --uid "${UID}" \
     "${USER}"; \
+    echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf && \
     apt update && apt dist-upgrade -y && apt install -y wget build-essential && set -eux; \
     dpkgArch="$(dpkg --print-architecture)"; \
     case "${dpkgArch##*-}" in \
@@ -25,7 +24,8 @@ RUN adduser \
         i386) rustArch='i686-unknown-linux-gnu'; rustupSha256='e50d1deb99048bc5782a0200aa33e4eea70747d49dffdc9d06812fd22a372515' ;; \
         *) echo >&2 "unsupported architecture: ${dpkgArch}"; exit 1 ;; \
     esac; \
-    url="https://static.rust-lang.org/rustup/archive/$RUSTUP_VERSION/${rustArch}/rustup-init"; \
+    url="https://static.rust-lang.org/rustup/dist/${rustArch}/rustup-init"; \
+    echo $url && \
     wget "$url"; \
     chmod +x rustup-init; \
     ./rustup-init -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION --default-host ${rustArch}; \
